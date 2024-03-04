@@ -6,7 +6,9 @@ import torch.nn as nn
 import torch.distributed as dist
 import torch.nn.functional as F
 from models.blender_dexperts import Model as DExperts
-from transformers.models.blenderbot.modeling_blenderbot import (BlenderbotConfig, BlenderbotForConditionalGeneration,)
+# from transformers.models.blenderbot.modeling_blenderbot import (BlenderbotConfig, BlenderbotForConditionalGeneration,)
+from transformers.models.blenderbot_small.modeling_blenderbot_small import BlenderbotSmallConfig as BlenderbotConfig
+from transformers.models.blenderbot_small.modeling_blenderbot_small import BlenderbotSmallForConditionalGeneration as BlenderbotForConditionalGeneration
 
 import inspect
 import warnings

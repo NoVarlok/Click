@@ -7,14 +7,14 @@ CUDA_VISIBLE_DEVICES=${cuda} accelerate launch \
     --mixed_precision no \
     --num_processes 1 \
     --num_machines 1 \
-    --num_cpu_threads_per_process 32 \
+    --num_cpu_threads_per_process 10 \
 generate.py \
     --collator_name text2text_dexperts \
-    --model_name blender_gedinew \
-    --pretrained_model_path /home/zhengchujie/pretrained-models/facebook/blenderbot-400M-distill \
-    --model_args checkpoints_bad/experts/expert checkpoints_bad/experts/antiexpert ${alpha} \
-    --save_path checkpoints_bad/gedinew \
-    --infer_data_paths data_bad/dexperts/valid.txt data_bad/dexperts/test.txt \
+    --model_name blender_gedi \
+    --pretrained_model_path /home/lyakhtin/repos/ctg/pretrained_models/blenderbot-90M \
+    --model_args /home/lyakhtin/repos/ctg/datasets/click_checkpoints/checkpoints_bad/experts/expert /home/lyakhtin/repos/ctg/datasets/click_checkpoints/checkpoints_bad/experts/antiexpert ${alpha} \
+    --save_path /home/lyakhtin/repos/ctg/datasets/click_checkpoints/checkpoints_bad/gedi \
+    --infer_data_paths /home/lyakhtin/repos/ctg/datasets/click_checkpoints/data_bad/dexperts/valid.txt /home/lyakhtin/repos/ctg/datasets/click_checkpoints/data_bad/dexperts/test.txt \
     --infer_names valid_${alpha} test_${alpha} \
     --only_generate \
     --max_input_length 128 \

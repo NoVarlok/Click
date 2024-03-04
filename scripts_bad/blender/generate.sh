@@ -3,15 +3,14 @@ CUDA_VISIBLE_DEVICES=0 accelerate launch \
     --mixed_precision no \
     --num_processes 1 \
     --num_machines 1 \
-    --num_cpu_threads_per_process 32 \
+    --num_cpu_threads_per_process 10 \
 generate.py \
     --collator_name text2text \
     --model_name blender \
-    --pretrained_model_path /home/zhengchujie/pretrained-models/facebook/blenderbot-400M-distill \
-    --save_path checkpoints_bad/blender \
-    --infer_data_paths data_bad/blender/valid.txt data_bad/blender/test.txt \
+    --pretrained_model_path /home/lyakhtin/repos/ctg/pretrained_models/blenderbot-90M \
+    --save_path /home/lyakhtin/repos/ctg/datasets/click_checkpoints/checkpoints_bad/blender \
+    --infer_data_paths /home/lyakhtin/repos/ctg/datasets/click_checkpoints/data_bad/blender/valid.txt /home/lyakhtin/repos/ctg/datasets/click_checkpoints/data_bad/blender/test.txt \
     --infer_names valid test \
-    --only_generate \
     --max_input_length 128 \
     --max_decoder_input_length 32 \
     --seed 0 \

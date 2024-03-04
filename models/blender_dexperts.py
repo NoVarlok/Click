@@ -7,7 +7,9 @@ import torch.distributed as dist
 import torch.nn.functional as F
 from models.blender import Model as Expert
 from models.blender import Model as AntiExpert
-from transformers.models.blenderbot.modeling_blenderbot import (BlenderbotConfig, BlenderbotForConditionalGeneration,)
+# from transformers.models.blenderbot.modeling_blenderbot import (BlenderbotConfig, BlenderbotForConditionalGeneration,)
+from transformers.models.blenderbot_small.modeling_blenderbot_small import BlenderbotSmallConfig as BlenderbotConfig
+from transformers.models.blenderbot_small.modeling_blenderbot_small import BlenderbotSmallForConditionalGeneration as BlenderbotForConditionalGeneration
 from utils.model_utils import BaseModel
 
 import inspect
@@ -24,6 +26,7 @@ from transformers.generation.stopping_criteria import (
 )
 from transformers.utils import ModelOutput, logging
 from transformers.generation.utils import SampleOutput, SampleDecoderOnlyOutput, SampleEncoderDecoderOutput
+from transformers import GenerationConfig
 
 
 logger = logging.get_logger(__name__)
@@ -290,25 +293,28 @@ class Model(BaseModel, BlenderbotForConditionalGeneration):
         if self.config.is_encoder_decoder:
             input_ids = self._prepare_decoder_input_ids_for_generation(
                 batch_size,
+                model_input_name,
                 decoder_start_token_id=decoder_start_token_id,
                 bos_token_id=bos_token_id,
                 model_kwargs=model_kwargs,
                 device=inputs_tensor.device,
-            )
+            )[0]
             expert_input_ids = self.expert._prepare_decoder_input_ids_for_generation(
                 aux_batch_size,
+                model_input_name,
                 decoder_start_token_id=decoder_start_token_id,
                 bos_token_id=bos_token_id,
                 model_kwargs=expert_kwargs,
                 device=aux_inputs_tensor.device,
-            )
+            )[0]
             antiexpert_input_ids = self.antiexpert._prepare_decoder_input_ids_for_generation(
                 aux_batch_size,
+                model_input_name,
                 decoder_start_token_id=decoder_start_token_id,
                 bos_token_id=bos_token_id,
                 model_kwargs=antiexpert_kwargs,
                 device=aux_inputs_tensor.device,
-            )
+            )[0]
         else:
             # if decoder-only then inputs_tensor has to be `input_ids`
             input_ids = inputs_tensor
@@ -365,60 +371,86 @@ class Model(BaseModel, BlenderbotForConditionalGeneration):
         assert is_sample_gen_mode #or is_beam_gen_mode
 
         # 7. prepare distribution pre_processing samplers
-        logits_processor = self._get_logits_processor(
+        generation_config = GenerationConfig(
             repetition_penalty=repetition_penalty,
             no_repeat_ngram_size=no_repeat_ngram_size,
             encoder_no_repeat_ngram_size=encoder_no_repeat_ngram_size,
-            input_ids_seq_length=input_ids_seq_length,
-            encoder_input_ids=inputs_tensor,
             bad_words_ids=bad_words_ids,
             min_length=min_length,
             max_length=max_length,
             eos_token_id=eos_token_id,
             forced_bos_token_id=forced_bos_token_id,
             forced_eos_token_id=forced_eos_token_id,
-            prefix_allowed_tokens_fn=prefix_allowed_tokens_fn,
             num_beams=num_beams,
             num_beam_groups=num_beam_groups,
             diversity_penalty=diversity_penalty,
             remove_invalid_values=remove_invalid_values,
             exponential_decay_length_penalty=exponential_decay_length_penalty,
-            logits_processor=logits_processor,
             renormalize_logits=renormalize_logits,
+            top_k=top_k,
+            top_p=top_p,
+            typical_p=typical_p,
+            temperature=temperature,
+        )
+        logits_processor = self._get_logits_processor(
+            # repetition_penalty=repetition_penalty,
+            # no_repeat_ngram_size=no_repeat_ngram_size,
+            # encoder_no_repeat_ngram_size=encoder_no_repeat_ngram_size,
+            generation_config=generation_config,
+            input_ids_seq_length=input_ids_seq_length,
+            encoder_input_ids=inputs_tensor,
+            # bad_words_ids=bad_words_ids,
+            # min_length=min_length,
+            # max_length=max_length,
+            # eos_token_id=eos_token_id,
+            # forced_bos_token_id=forced_bos_token_id,
+            # forced_eos_token_id=forced_eos_token_id,
+            prefix_allowed_tokens_fn=prefix_allowed_tokens_fn,
+            # num_beams=num_beams,
+            # num_beam_groups=num_beam_groups,
+            # diversity_penalty=diversity_penalty,
+            # remove_invalid_values=remove_invalid_values,
+            # exponential_decay_length_penalty=exponential_decay_length_penalty,
+            logits_processor=logits_processor,
+            # renormalize_logits=renormalize_logits,
         )
 
         # 8. prepare stopping criteria
+        # stopping_criteria = self._get_stopping_criteria(
+        #     max_length=max_length, max_time=max_time, stopping_criteria=stopping_criteria
+        # )
         stopping_criteria = self._get_stopping_criteria(
-            max_length=max_length, max_time=max_time, stopping_criteria=stopping_criteria
+             generation_config=generation_config, stopping_criteria=stopping_criteria
         )
 
         # 9. go into different generation modes
         if is_sample_gen_mode:
             # 10. prepare logits warper
             logits_warper = self._get_logits_warper(
-                top_k=top_k,
-                top_p=top_p,
-                typical_p=typical_p,
-                temperature=temperature,
-                num_beams=num_beams,
-                renormalize_logits=renormalize_logits,
+                # top_k=top_k,
+                # top_p=top_p,
+                # typical_p=typical_p,
+                # temperature=temperature,
+                # num_beams=num_beams,
+                # renormalize_logits=renormalize_logits,
+                generation_config=generation_config,
             )
 
             # 11. expand input_ids with `num_return_sequences` additional sequences per batch
             input_ids, model_kwargs = self._expand_inputs_for_generation(
-                input_ids,
+                input_ids=input_ids,
                 expand_size=num_return_sequences,
                 is_encoder_decoder=self.config.is_encoder_decoder,
                 **model_kwargs,
             )
             expert_input_ids, expert_kwargs = self.expert._expand_inputs_for_generation(
-                expert_input_ids,
+                input_ids=expert_input_ids,
                 expand_size=num_return_sequences,
                 is_encoder_decoder=self.expert.config.is_encoder_decoder,
                 **expert_kwargs,
             )
             antiexpert_input_ids, antiexpert_kwargs = self.antiexpert._expand_inputs_for_generation(
-                antiexpert_input_ids,
+                input_ids=antiexpert_input_ids,
                 expand_size=num_return_sequences,
                 is_encoder_decoder=self.antiexpert.config.is_encoder_decoder,
                 **antiexpert_kwargs,
@@ -633,3 +665,30 @@ class Model(BaseModel, BlenderbotForConditionalGeneration):
                 )
         else:
             return input_ids
+    
+    def _expand_inputs_for_generation(
+        self,
+        expand_size: int = 1,
+        is_encoder_decoder: bool = False,
+        input_ids: Optional[torch.LongTensor] = None,
+        **model_kwargs,
+    ) -> Tuple[torch.LongTensor, Dict[str, Any]]:
+        """Expands tensors from [batch_size, ...] to [batch_size * expand_size, ...]"""
+
+        def _expand_dict_for_generation(dict_to_expand):
+            for key in dict_to_expand:
+                if dict_to_expand[key] is not None and isinstance(dict_to_expand[key], torch.Tensor):
+                    dict_to_expand[key] = dict_to_expand[key].repeat_interleave(expand_size, dim=0)
+            return dict_to_expand
+
+        if input_ids is not None:
+            input_ids = input_ids.repeat_interleave(expand_size, dim=0)
+
+        model_kwargs = _expand_dict_for_generation(model_kwargs)
+
+        if is_encoder_decoder:
+            if model_kwargs.get("encoder_outputs") is None:
+                raise ValueError("If `is_encoder_decoder` is True, make sure that `encoder_outputs` is defined.")
+            model_kwargs["encoder_outputs"] = _expand_dict_for_generation(model_kwargs["encoder_outputs"])
+
+        return input_ids, model_kwargs

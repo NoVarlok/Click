@@ -3,13 +3,13 @@ CUDA_VISIBLE_DEVICES=0 accelerate launch \
     --mixed_precision no \
     --num_processes 1 \
     --num_machines 1 \
-    --num_cpu_threads_per_process 32 \
+    --num_cpu_threads_per_process 10 \
 generate.py \
     --collator_name text2text \
     --model_name blender \
-    --pretrained_model_path checkpoints_bad/contrast_05/20.0 \
-    --save_path checkpoints_bad/contrast_05/20.0 \
-    --infer_data_paths data_bad/blender/train.txt \
+    --pretrained_model_path /home/lyakhtin/repos/ctg/datasets/click_checkpoints/checkpoints_bad/contrast_05/20.0 \
+    --save_path /home/lyakhtin/repos/ctg/datasets/click_checkpoints/checkpoints_bad/contrast_05/20.0 \
+    --infer_data_paths /home/lyakhtin/repos/ctg/datasets/click/data_bad/blender/train.txt \
     --infer_names train \
     --only_generate \
     --max_input_length 128 \

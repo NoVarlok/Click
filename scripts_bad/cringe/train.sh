@@ -7,13 +7,13 @@ CUDA_VISIBLE_DEVICES=${cuda} accelerate launch \
     --mixed_precision fp16 \
     --num_processes 1 \
     --num_machines 1 \
-    --num_cpu_threads_per_process 32 \
+    --num_cpu_threads_per_process 10 \
 train.py \
     --collator_name text2text_labels \
     --model_name blender_cringe_${gamma} \
-    --pretrained_model_path /home/zhengchujie/pretrained-models/facebook/blenderbot-400M-distill \
-    --save_path checkpoints_bad/cringe_${gamma} \
-    --train_data_path data_bad/labels/train.txt \
+    --pretrained_model_path /home/lyakhtin/repos/ctg/pretrained_models/blenderbot-90M \
+    --save_path /home/lyakhtin/repos/ctg/datasets/click_checkpoints/checkpoints_bad/cringe_${gamma} \
+    --train_data_path /home/lyakhtin/repos/ctg/datasets/click_checkpoints/data_bad/labels/train.txt \
     --max_input_length 128 \
     --max_decoder_input_length 32 \
     --seed 42 \

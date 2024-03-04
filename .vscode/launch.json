@@ -1,0 +1,42 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--collator_name", "text2text_dexperts",
+                "--model_name", "blender_gedi",
+                "--pretrained_model_path", "/home/lyakhtin/repos/ctg/pretrained_models/blenderbot-90M",
+                "--model_args", "/home/lyakhtin/repos/ctg/datasets/click_checkpoints/checkpoints_bad/experts/expert", "home/lyakhtin/repos/ctg/datasets/click_checkpoints/checkpoints_bad/experts/antiexpert", "20.0",
+                "--save_path", "/home/lyakhtin/repos/ctg/datasets/click_checkpoints/checkpoints_bad/gedi",
+                "--infer_data_paths", "/home/lyakhtin/repos/ctg/datasets/click_checkpoints/data_bad/dexperts/valid.txt", "/home/lyakhtin/repos/ctg/datasets/click_checkpoints/data_bad/dexperts/test.txt",
+                "--infer_names", "valid_20.0", "test_20.0",
+                "--only_generate",
+                "--max_input_length", "128",
+                "--max_decoder_input_length", "32",
+                "--seed", "0",
+                "--lower",
+                "--max_length", "32",
+                "--min_length", "5",
+                "--batch_size", "8",
+                "--temperature", "1",
+                "--top_k", "0",
+                "--top_p", "0.9",
+                "--num_beams", "1",
+                "--num_return_sequences", "25",
+                "--length_penalty", "1",
+                "--repetition_penalty", "1",
+                "--no_repeat_ngram_size", "0",
+                "--encoder_no_repeat_ngram_size", "0",
+            ]
+        }
+    ]
+}

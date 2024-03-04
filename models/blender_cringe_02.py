@@ -5,7 +5,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import CrossEntropyLoss
 from torch.distributions import Categorical
-from transformers.models.blenderbot.modeling_blenderbot import (BlenderbotConfig, BlenderbotForConditionalGeneration,)
+# from transformers.models.blenderbot.modeling_blenderbot import (BlenderbotConfig, BlenderbotForConditionalGeneration,)
+from transformers.models.blenderbot_small.modeling_blenderbot_small import BlenderbotSmallConfig as BlenderbotConfig
+from transformers.models.blenderbot_small.modeling_blenderbot_small import BlenderbotSmallForConditionalGeneration as BlenderbotForConditionalGeneration
 from utils.model_utils import BaseModel
 
 GAMMA = 0.2
