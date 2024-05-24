@@ -1,7 +1,46 @@
-0.4449576597382602	11.851033675951289	0.4072938143992218	0.479065327185004
-
-0.10854503464203233	16.21654046894837	0.12376718707080014	0.12955969422336852
-0.2455735180908391	32.89702842772988	0.25389822040736865	0.28017610916647073
-0.2294072363356428	15.99222065959545	0.30117925619951874	0.33941937950746215
-0.46266358737490376	17.505705879586667	0.4407349064638764	0.5119153998042687
-0.06928406466512702	18.452424103296195	0.5061278783147573	0.5839789182992058
+| Method                                                     |   Toxicity_(prob)_lower |   Fluency_(ppl)_lower |   Divirsity_(Dist_2)_higher |   Divirsity_(Dist_3)_higher |
+|:-----------------------------------------------------------|------------------------:|----------------------:|----------------------------:|----------------------------:|
+| ft                                                         |              0.444958   |               11.851  |                   0.407294  |                   0.479065  |
+| gedi                                                       |              0.108545   |               16.2165 |                   0.123767  |                   0.12956   |
+| dexperts                                                   |              0.245574   |               32.897  |                   0.253898  |                   0.280176  |
+| director                                                   |              0.229407   |               15.9922 |                   0.301179  |                   0.339419  |
+| cringe                                                     |              0.462664   |               17.5057 |                   0.440735  |                   0.511915  |
+| contrast                                                   |              0.0692841  |               18.4524 |                   0.506128  |                   0.583979  |
+| contrast_correct_pairing                                   |              0.0769823  |               19.8404 |                   0.522293  |                   0.599159  |
+| contrast_pairing_second                                    |              0.113934   |               21.618  |                   0.538036  |                   0.614784  |
+| base_10                                                    |              0.0715935  |               18.0445 |                   0.503994  |                   0.582159  |
+| iterative_pairing_2                                        |              0.095458   |               22.5635 |                   0.545316  |                   0.625114  |
+| base_filter_loss                                           |              0.0623557  |               18.2637 |                   0.512094  |                   0.593107  |
+| base_filter_loss_ft                                        |              0.0831409  |               16.8638 |                   0.488431  |                   0.564035  |
+| base_filter_loss_75                                        |              0.0692841  |               18.1838 |                   0.501307  |                   0.578334  |
+| base_filter_loss_100_ft_raw                                |              0.0885296  |               17.8902 |                   0.481813  |                   0.553779  |
+| base_sorted_filter_loss                                    |              0.0631255  |               18.3374 |                   0.512473  |                   0.593226  |
+| negatieve_embedding_matching                               |              0.0916089  |               19.7529 |                   0.521169  |                   0.603733  |
+| combined_loss_embedding_matching                           |              0.0600462  |               18.716  |                   0.514251  |                   0.596515  |
+| combined_loss_then_embedding_matching                      |              0.105466   |               20.2883 |                   0.521916  |                   0.601967  |
+| inference_softmax_t_1.5                                    |              0.8699     |              768.789  |                   0.848412  |                   0.843562  |
+| inference_softmax_t_1.1                                    |              0.182448   |               29.8625 |                   0.584036  |                   0.659855  |
+| inference_softmax_t_0.9                                    |              0.0623557  |               15.6809 |                   0.464229  |                   0.547683  |
+| inference_softmax_t_0.8                                    |              0.0438799  |               13.5356 |                   0.412202  |                   0.493146  |
+| inference_softmax_beams_50                                 |              0          |               14.1141 |                   0.0786775 |                   0.0820015 |
+| inference_softmax_beams_25                                 |              0.00384911 |               14.4206 |                   0.100538  |                   0.107214  |
+| base_t_0.9                                                 |              0.0592764  |               14.962  |                   0.449928  |                   0.528282  |
+| base_t_0.8                                                 |              0.0500385  |               13.273  |                   0.392454  |                   0.465195  |
+| best_model_gamma_2.5                                       |              0.118553   |               16.0094 |                   0.474587  |                   0.549137  |
+| combined_loss_embedding_matching_confidence_0.05           |              0.0816012  |               18.6377 |                   0.512726  |                   0.592636  |
+| combined_loss_embedding_matching_confidence_0.10           |              0.0754426  |               18.3589 |                   0.508244  |                   0.588482  |
+| combined_loss_embedding_matching_confidence_0.15           |              0.0839107  |               18.9231 |                   0.524342  |                   0.607761  |
+| combined_loss_embedding_matching_confidence_0.20           |              0.0969977  |               18.0847 |                   0.504716  |                   0.587913  |
+| combined_loss_embedding_matching_negatieve_confidence_0.20 |              0.0746728  |               19.3313 |                   0.511778  |                   0.591254  |
+| combined_loss_embedding_matching_target                    |              0.100077   |               20.3189 |                   0.554818  |                   0.641266  |
+| combined_loss_embedding_matching_target_filtered_80        |              0.106236   |               20.3084 |                   0.550555  |                   0.635923  |
+| combined_loss_embedding_matching_target_filtered_40        |              0.0923788  |               20.1338 |                   0.551159  |                   0.635452  |
+| combined_loss_embedding_matching_target_filtered_20        |              0.08699    |               19.1144 |                   0.529805  |                   0.61362   |
+| combined_loss_embedding_matching_target_filtered_10        |              0.0823711  |               18.6027 |                   0.517831  |                   0.600583  |
+| combined_loss_embedding_matching_target_filtered_5         |              0.0685142  |               18.5941 |                   0.513101  |                   0.594671  |
+| combined_loss_embedding_matching_check                     |              0.0831409  |               18.3026 |                   0.513154  |                   0.596305  |
+| base_check                                                 |              0.039261   |               18.905  |                   0.496369  |                   0.570219  |
+| combined_loss_embedding_pos_linear_prob_matching           |              0.073903   |               19.0901 |                   0.514828  |                   0.593793  |
+| combined_loss_embedding_pos_log_prob_matching              |              0.073903   |               19.0563 |                   0.520499  |                   0.600825  |
+| combined_loss_embedding_neg_pos_linear_prob_matching       |              0.0816012  |               18.7852 |                   0.518424  |                   0.59889   |
+| combined_loss_embedding_pos_linear_prob_matching_copy      |              0.073903   |               19.0901 |                   0.514828  |                   0.593793  |
